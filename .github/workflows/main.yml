@@ -1,0 +1,48 @@
+aNotepadaNotepad - free online notepad
+Features
+Register/Login
+ 
+RDP Code 2024
+Share
+name: Cl
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Download
+      run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+    - name: Extract
+      run: Expand-Archive ngrok.zip
+    - name: Auth
+      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Enable TS
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
+    - name: Create Tunnel
+      run: .\ngrok\ngrok.exe tcp 3389
+Public Last updated: 2024-06-25 10:18:25 AM
+
+Comments
+Arun  •  4 days ago Reply
+Not working  Error: Process completed with exit code 1.
+Your Name
+Comment
+
+Download on the Apple Store   Get it on Google Play
+
+© 2009-2024 aNotepad.com
+
+About | Privacy | Features | Resume Builder | Free Fax | Report Abuse
+
+aNotepad.com is your everyday online notepad. You can take notes and share notes online without having to login.
+You can use a rich text editor and download your note as PDF or Word document.
+Best of all - aNotepad is a fast, clean, and easy-to-use notepad online.
